@@ -28,7 +28,7 @@ cfg.NUM_WORKERS = 4
 cfg.NUM_CLASSES = 5
 # Exp dirs
 cfg.EXP_NAME          = ''
-cfg.EXP_ROOT          =  '/home1/jkwang/code/da/MPSCL/scripts/experiments'
+cfg.EXP_ROOT          =  '/data/jiakunwang/code/DA/MPSCL/scripts/experiments'
 cfg.EXP_ROOT_SNAPSHOT = osp.join(cfg.EXP_ROOT, 'snapshots')
 cfg.EXP_ROOT_LOGS     = osp.join(cfg.EXP_ROOT, 'logs')
 cfg.FULLY_SUPERVISED  = False
