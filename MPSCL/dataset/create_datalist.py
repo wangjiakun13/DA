@@ -25,9 +25,9 @@ def make_datalist(data_fd, gt_fd, data_list,data_gt_list):
 if __name__ == '__main__':
 
     #Plz change the path follow your setting
-    data_fd      = '/home1/jkwang/dataset/MMWHS/data_np/val_ct/'
-    gt_fd = '/home1/jkwang/dataset/MMWHS/data_np/gt_val_ct/'
-    data_list    = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_ct.txt'
-    data_gt_list = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_ct_gt.txt'
+    data_fd      = '/data/jiakunwang/dataset/MMWHS/data_np/train_ct/'
+    gt_fd = '/data/jiakunwang/dataset/MMWHS/data_np/gt_train_ct/'
+    data_list    = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_ct.txt'
+    data_gt_list = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_ct_gt.txt'
     make_datalist(data_fd, gt_fd, data_list, data_gt_list)
 

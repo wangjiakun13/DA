@@ -111,14 +111,14 @@ def main():
         raise NotImplementedError(f"Not yet supported {cfg.TRAIN.MODEL}")
 
     # DataLoaders
-    train_mr_data_pth = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_mr.txt'
-    train_ct_data_pth = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_ct.txt'
-    train_mr_gt_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_mr_gt.txt'
-    train_ct_gt_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_ct_gt.txt'
-    val_mr_data_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_mr.txt'
-    val_ct_data_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_ct.txt'
-    val_mr_gt_pth     = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_mr_gt.txt'
-    val_ct_gt_pth     = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_ct_gt.txt'
+    train_mr_data_pth = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_mr.txt'
+    train_ct_data_pth = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_ct.txt'
+    train_mr_gt_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_mr_gt.txt'
+    train_ct_gt_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_ct_gt.txt'
+    val_mr_data_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_mr.txt'
+    val_ct_data_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_ct.txt'
+    val_mr_gt_pth     = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_mr_gt.txt'
+    val_ct_gt_pth     = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_ct_gt.txt'
 
 
     transforms = None
