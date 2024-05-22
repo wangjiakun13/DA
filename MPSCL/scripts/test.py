@@ -37,10 +37,10 @@ def main():
     target_modality = args.target_modality
 
     if target_modality == 'CT':
-        test_list_pth = '/home1/jkwang/dataset/MMWHS/data_np/data_list/test_ct.txt'
+        test_list_pth = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/test_ct.txt'
     if target_modality == 'MR':
-        test_list_pth = '/home1/jkwang/dataset/MMWHS/data_np/data_list/test_mr.txt'
-    with open(test_list_pth) as fp:
+        test_list_pth = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/test_mr.txt'
+    with open('/data/jiakunwang/dataset/MMWHS/data_np/data_list/test_ct.txt') as fp:
         rows = fp.readlines()
     testfile_list = [row[:-1] for row in rows]
 
