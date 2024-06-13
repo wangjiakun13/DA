@@ -93,7 +93,7 @@ def eval_uda(testfile_list,model,pretrained_model_pth,TARGET_MODALITY):
             data_batch = np.zeros([BATCHSIZE, 3, 256, 256])
             for idx, jj in enumerate(frame_list[ii * BATCHSIZE: (ii + 1) * BATCHSIZE]):
                 item_data = data[..., jj]
-
+   
                 if TARGET_MODALITY == 'CT':
                     item_data = np.subtract(
                         np.multiply(np.divide(np.subtract(item_data, -2.8), np.subtract(3.2, -2.8)), 2.0),
@@ -125,8 +125,6 @@ def eval_uda(testfile_list,model,pretrained_model_pth,TARGET_MODALITY):
         print('pred spend time is {} seconds'.format(pred_spend_time))
 
         label = label.astype(int)
-        print(np.unique(label))
-        print(np.unique(tmp_pred))
         metric_start_time      = datetime.now()
         dice, assd             = _compute_metric(tmp_pred,label)
         metric_end_time        = datetime.now()

@@ -1,6 +1,8 @@
 
 import sys
 import os
+import time
+
 curPath = os.path.abspath(os.path.dirname(__file__)) # 获取当前绝对路径C
 sys.path.append(curPath)
 rootPath = os.path.split(curPath)[0]				 # 上一级目录B
@@ -15,6 +17,7 @@ import warnings
 import numpy as np
 import yaml
 import torch
+from tensorboardX import SummaryWriter
 from torch.utils import data
 from MPSCL.dataset.data_reader import CTDataset,MRDataset
 from MPSCL.model.deeplabv2 import get_deeplab_v2
@@ -57,7 +60,7 @@ def main():
     pth = osp.join(cfg.EXP_ROOT_SNAPSHOT, cfg.EXP_NAME)
 
     # auto-generate snapshot path if not specified
-
+    writer = SummaryWriter(logdir='./runs/{time}'.format(time=time.strftime("%Y-%m-%d_%H-%M-%S", time.localtime())))
     if cfg.TRAIN.SNAPSHOT_DIR == '':
         cfg.TRAIN.SNAPSHOT_DIR = osp.join(cfg.EXP_ROOT_SNAPSHOT,cfg.EXP_NAME)
         os.makedirs(cfg.TRAIN.SNAPSHOT_DIR, exist_ok=True)
@@ -111,14 +114,14 @@ def main():
         raise NotImplementedError(f"Not yet supported {cfg.TRAIN.MODEL}")
 
     # DataLoaders
-    train_mr_data_pth = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_mr.txt'
-    train_ct_data_pth = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_ct.txt'
-    train_mr_gt_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_mr_gt.txt'
-    train_ct_gt_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/train_ct_gt.txt'
-    val_mr_data_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_mr.txt'
-    val_ct_data_pth   = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_ct.txt'
-    val_mr_gt_pth     = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_mr_gt.txt'
-    val_ct_gt_pth     = '/home1/jkwang/dataset/MMWHS/data_np/data_list/val_ct_gt.txt'
+    train_mr_data_pth = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_mr.txt'
+    train_ct_data_pth = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_ct.txt'
+    train_mr_gt_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_mr_gt.txt'
+    train_ct_gt_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/train_ct_gt.txt'
+    val_mr_data_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_mr.txt'
+    val_ct_data_pth   = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_ct.txt'
+    val_mr_gt_pth     = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_mr_gt.txt'
+    val_ct_gt_pth     = '/data/jiakunwang/dataset/MMWHS/data_np/data_list/val_ct_gt.txt'
 
 
     transforms = None
@@ -203,7 +206,7 @@ def main():
         yaml.dump(cfg, yaml_file, default_flow_style=False)
 
     # UDA TRAINING
-    train_domain_adaptation(model,strain_loader,trgtrain_loader,sval_loader,cfg)
+    train_domain_adaptation(writer, model,strain_loader,trgtrain_loader,sval_loader,cfg)
 
 
 if __name__ == '__main__':

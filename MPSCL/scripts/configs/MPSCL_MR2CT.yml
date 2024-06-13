@@ -5,10 +5,10 @@ FULLY_SUPERVISED: False
 TRAIN:
   DA_METHOD: MPSCL
   MODEL: DeepLabv2
-  RESTORE_FROM:   /home1/jkwang/code/da/MPSCL/pretrain_model/MPSCL_Pretrained_Model/training/mr2ct_model_pretrained.pth
-  D_AUX_RESTORE:  /home1/jkwang/code/da/MPSCL/pretrain_model/MPSCL_Pretrained_Model/training/mr2ct_model_pretrained_D_aux.pth
-  D_MAIN_RESTORE: /home1/jkwang/code/da/MPSCL/pretrain_model/MPSCL_Pretrained_Model/training/mr2ct_model_pretrained_D_main.pth
-  CLASS_CENTER_FEA_INIT: /home1/jkwang/code/da/MPSCL/pretrain_model/MPSCL_Pretrained_Model/training/mr2ct_class_center_feas_init_test.npy
+  RESTORE_FROM: /data/jiakunwang/code/MPSCL_Pretrained_Model/training/mr2ct_model_pretrained.pth
+  D_AUX_RESTORE: /data/jiakunwang/code/MPSCL_Pretrained_Model/training/mr2ct_model_pretrained_D_aux.pth
+  D_MAIN_RESTORE: /data/jiakunwang/code/MPSCL_Pretrained_Model/training/mr2ct_model_pretrained_D_main.pth
+  CLASS_CENTER_FEA_INIT: /data/jiakunwang/code/MPSCL_Pretrained_Model/training/mr2ct_class_center_feas_init.npy
   D_TYPE:         Original_D
   D_NORM:          Batch_Norm
   MULTI_LEVEL: True

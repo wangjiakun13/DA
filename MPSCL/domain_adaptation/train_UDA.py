@@ -146,7 +146,7 @@ def update_class_center_iter(cla_src_feas,batch_src_labels,class_center_feas,m):
 
     return class_center_feas
 
-def train_mpscl(model, strain_loader,sval_loader,trgtrain_loader,cfg):
+def train_mpscl(writer, model, strain_loader,sval_loader,trgtrain_loader,cfg):
     '''
         UDA training
         '''
@@ -202,8 +202,8 @@ def train_mpscl(model, strain_loader,sval_loader,trgtrain_loader,cfg):
                                   betas=(0.9, 0.99))
 
     # compute class center
-    # class_center_feas = np.load(cfg.TRAIN.CLASS_CENTER_FEA_INIT).squeeze()
-    # class_center_feas = torch.from_numpy(class_center_feas).float().cuda()
+    class_center_feas = np.load(cfg.TRAIN.CLASS_CENTER_FEA_INIT).squeeze()
+    class_center_feas = torch.from_numpy(class_center_feas).float().cuda()
 
     # interpolate output segmaps
     interp = nn.Upsample(size=(input_size_source[1], input_size_source[0]), mode='bilinear',
@@ -272,14 +272,17 @@ def train_mpscl(model, strain_loader,sval_loader,trgtrain_loader,cfg):
         # pred_src_main torch.Size([16, 5, 33, 33])
         cla_feas_trg, pred_trg_aux, pred_trg_main = model(images_target.cuda())
 
-        if i_iter == 0:
-            class_center_feas = gen_class_center_feas(cla_feas_src, labels_source)
-            class_center_feas = class_center_feas.cuda()
-            # class_center_feas = class_center_feas.numpy()
-            # np.save(cfg.TRAIN.CLASS_CENTER_FEA_INIT, class_center_feas)
-        else:
-            class_center_feas = update_class_center_iter(cla_feas_src, labels_source, class_center_feas,m=cfg.TRAIN.CLASS_CENTER_M)
+        # if i_iter == 0:
+        #     class_center_feas = gen_class_center_feas(cla_feas_src, labels_source)
+        #     class_center_feas = class_center_feas.cuda()
+        #     # class_center_feas = class_center_feas.numpy()
+        #     # np.save(cfg.TRAIN.CLASS_CENTER_FEA_INIT, class_center_feas)
+        # else:
+        #     class_center_feas = update_class_center_iter(cla_feas_src, labels_source, class_center_feas,m=cfg.TRAIN.CLASS_CENTER_M)
         # class_center_feas torch.Size([5, 2048])
+
+        class_center_feas = update_class_center_iter(cla_feas_src, labels_source, class_center_feas,
+                                                     m=cfg.TRAIN.CLASS_CENTER_M)
 
         hard_pixel_label,pixel_mask = generate_pseudo_label(cla_feas_trg, class_center_feas, cfg)
         # hard_pixel_label torch.Size([17424])
@@ -374,6 +377,13 @@ def train_mpscl(model, strain_loader,sval_loader,trgtrain_loader,cfg):
         optimizer_d_main.step()
 
 
+        loss_total = loss_seg_src_aux + loss_seg_src_main + loss_dice_src_aux + loss_dice_src_main + mpcl_loss_tr + mpcl_loss_tg + loss_adv_trg_aux + loss_adv_trg_main + loss_d_aux + loss_d_main
+
+        writer.add_scalar('loss_mpcl_tr', mpcl_loss_tr.item(), i_iter)
+        writer.add_scalar('loss_mpcl_tg', mpcl_loss_tg.item(), i_iter)
+        writer.add_scalar('loss', loss_total.item(), i_iter)
+
+
         current_losses = {'loss_seg_src_aux': loss_seg_src_aux,
                           'loss_seg_src_main': loss_seg_src_main,
                           'loss_mpcl_tr': mpcl_loss_tr,
@@ -383,7 +393,8 @@ def train_mpscl(model, strain_loader,sval_loader,trgtrain_loader,cfg):
                           'loss_adv_trg_aux': loss_adv_trg_aux,
                           'loss_adv_trg_main': loss_adv_trg_main,
                           'loss_d_aux': loss_d_aux,
-                          'loss_d_main': loss_d_main}
+                          'loss_d_main': loss_d_main,
+                          'loss_total': loss_total}
 
 
         print_losses(current_losses, i_iter)
@@ -593,6 +604,8 @@ def train_advent(model, strain_loader,sval_loader, trgtrain_loader, cfg):
             optimizer_d_aux.step()
         optimizer_d_main.step()
 
+        total_loss = loss_seg_src_aux + loss_seg_src_main + loss_adv_trg_aux + loss_adv_trg_main + loss_d_aux + loss_d_main
+
         current_losses = {'loss_seg_src_aux' :loss_seg_src_aux,
                           'loss_seg_src_main':loss_seg_src_main,
                           'loss_dice_aux': loss_dice_aux,
@@ -600,7 +613,8 @@ def train_advent(model, strain_loader,sval_loader, trgtrain_loader, cfg):
                           'loss_adv_trg_aux' :loss_adv_trg_aux,
                           'loss_adv_trg_main':loss_adv_trg_main,
                           'loss_d_aux'       :loss_d_aux,
-                          'loss_d_main'      :loss_d_main}
+                          'loss_d_main'      :loss_d_main,
+                          'total_loss'       :total_loss}
         print_losses(current_losses,i_iter)
 
         if i_iter % cfg.TRAIN.SAVE_PRED_EVERY == 0 and i_iter != 0:
@@ -642,12 +656,12 @@ def to_numpy(tensor):
     else:
         return tensor.data.cpu().numpy()
 
-def train_domain_adaptation(model,strain_loader,trgtrain_loader,sval_loader,cfg):
+def train_domain_adaptation(writer, model,strain_loader,trgtrain_loader,sval_loader,cfg):
 
     if cfg.TRAIN.DA_METHOD == 'MPSCL':
-        train_mpscl(model, strain_loader, sval_loader,trgtrain_loader, cfg)
+        train_mpscl(writer, model, strain_loader, sval_loader,trgtrain_loader, cfg)
     if cfg.TRAIN.DA_METHOD == 'AdvEnt':
-        train_advent(model, strain_loader, sval_loader,trgtrain_loader, cfg)
+        train_advent(writer, model, strain_loader, sval_loader,trgtrain_loader, cfg)
 
 def load_checkpoint(model, checkpoint,):
     saved_state_dict = torch.load(checkpoint,map_location='cpu')

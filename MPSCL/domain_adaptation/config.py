@@ -28,7 +28,7 @@ cfg.NUM_WORKERS = 4
 cfg.NUM_CLASSES = 5
 # Exp dirs
 cfg.EXP_NAME          = ''
-cfg.EXP_ROOT          =  '/home1/jkwang/code/da/MPSCL/scripts/experiments'
+cfg.EXP_ROOT          =  '/data/jiakunwang/code/DA/MPSCL/scripts/experiments'
 cfg.EXP_ROOT_SNAPSHOT = osp.join(cfg.EXP_ROOT, 'snapshots')
 cfg.EXP_ROOT_LOGS     = osp.join(cfg.EXP_ROOT, 'logs')
 cfg.FULLY_SUPERVISED  = False
@@ -39,7 +39,7 @@ cfg.UDA    = True
 # TRAIN CONFIGS
 cfg.TRAIN = EasyDict()
 cfg.TRAIN.D           = ''
-cfg.TRAIN.BATCH_SIZE        = 16    
+cfg.TRAIN.BATCH_SIZE        = 4
 cfg.TRAIN.INPUT_SIZE_SOURCE = (256, 256)
 cfg.TRAIN.INPUT_SIZE_TARGET = (256, 256)
 cfg.TRAIN.SRC_MARGIN            = 0.0
@@ -93,7 +93,7 @@ cfg.TRAIN.LAMBDA_ADV_AUX  = 0.0006
 cfg.TRAIN.LAMBDA_ENT_MAIN = 0.001
 cfg.TRAIN.LAMBDA_ENT_AUX  = 0.0002
 # Other params
-cfg.TRAIN.MAX_ITERS           = 50000
+cfg.TRAIN.MAX_ITERS           = 1000000
 cfg.TRAIN.EARLY_STOP          = 30000
 cfg.TRAIN.SAVE_PRED_EVERY     = 500
 cfg.TRAIN.SNAPSHOT_DIR        = ''
